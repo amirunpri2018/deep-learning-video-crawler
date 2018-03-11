@@ -1,0 +1,4 @@
+----Teaching kids the name of objects while watching video--------
+----- Displaying the relevant ad depending on the current content on the screen---------
+----- Reducing searching time ------------
+--------Automated video bookmarks ------------
