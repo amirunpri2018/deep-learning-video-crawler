@@ -22,22 +22,22 @@ class PredictorThread(threading.Thread):
         
     def run(self):
         global graph,model
-		#checking for start and end of the video
-        while(frame.any()!=None):
+	#checking for start and end of the video
+        
+	while(frame.any()!=None):    
+		image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
+            	#adding an additional dimension as required by the keras preprocess_input method   
+            	image = image.reshape((1,) + image.shape)
+		# preprocessing the input image to make it as required by VGG16 model
+            	image = preprocess_input(image)
             
-			image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
-            #adding an additional dimension as required by the keras preprocess_input method   
-            image = image.reshape((1,) + image.shape)
-			# preprocessing the input image to make it as required by VGG16 model
-            image = preprocess_input(image)
-            
-			with graph.as_default():
-                global label
-                yhat = model.predict(image) #predicts top 5 labels
-                pred = decode_predictions(yhat)[0] 
-                label=''
-                for _,name,_ in pred:
-                    label=label+" "+name          
+		with graph.as_default():
+                	global label
+                	yhat = model.predict(image) #predicts top 5 labels
+                	pred = decode_predictions(yhat)[0] 
+                	label=''
+                	for _,name,_ in pred:
+                    		label=label+" "+name          
 
 if __name__== "__main__":
     cap = cv2.VideoCapture('test_now.mp4')
@@ -45,7 +45,7 @@ if __name__== "__main__":
     out = cv2.VideoWriter('output_test_now_new.avi',fourcc, 20.0, (640,480))
     ret, original = cap.read()
     frame = cv2.resize(original, (224, 224))
-	#using a separate thread to predict the labels so as to not block the UI thread & make it unresponsive/slow
+    #using a separate thread to predict the labels so as to not block the UI thread & make it unresponsive/slow
     predictor_thread = PredictorThread()
     predictor_thread.start()
     
@@ -57,7 +57,7 @@ if __name__== "__main__":
             cv2.imshow("Classification", original)
             
             if ret==True:
-				#checking for a particular label & then append it to a separate video stream
+		#checking for a particular label & then append it to a separate video stream
                 if(label.find("revolver")!=-1):
                     temp=cv2.resize(original,(640,480))
                     out.write(temp)
