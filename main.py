@@ -22,8 +22,8 @@ class PredictorThread(threading.Thread):
         
     def run(self):
         global graph,model
+	
 	#checking for start and end of the video
-        
 	while(frame.any()!=None):    
 		image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).astype(np.float32)
             	#adding an additional dimension as required by the keras preprocess_input method   
@@ -69,8 +69,8 @@ if __name__== "__main__":
             tb = traceback.format_exc()
             print(tb)
             os.system('pause')
-	finally:
-			out.release()
+    finally:
+	    out.release()
             cap.release()
             frame=None
             cv2.destroyAllWindows()
